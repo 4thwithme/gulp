@@ -113,5 +113,5 @@ gulp.task(
 );
 gulp.task(
   "build",
-  gulp.parallel("prebuild", "clean", "img", "sass", "scripts"),
+  gulp.parallel("prebuild", "clear", "img", "sass", "scripts"),
 );
