@@ -10,6 +10,7 @@ import rename from "gulp-rename";
 import cache from "gulp-cache";
 import imagemin from "gulp-imagemin";
 import pngquant from "imagemin-pngquant";
+import del from "del";
 
 gulp.task("sass", async () => {
   gulp
@@ -81,26 +82,30 @@ gulp.task("watch", async () => {
   gulp.watch("src/js/*.js", gulp.parallel("scripts"));
 });
 
+gulp.task('clean', async function() {
+  return del.sync('public');
+});
+
 gulp.task("prebuild", async () => {
   var buildCss = gulp
     .src([
       // Переносим библиотеки в продакшен
-      "app/css/main.css",
-      "app/css/libs.min.css",
+      "src/css/q.css",
+      "src/css/q.min.css",
     ])
-    .pipe(gulp.dest("dist/css"));
+    .pipe(gulp.dest("public/css"));
 
   var buildFonts = gulp
-    .src("app/fonts/**/*") // Переносим шрифты в продакшен
-    .pipe(gulp.dest("dist/fonts"));
+    .src("src/fonts/**/*") // Переносим шрифты в продакшен
+    .pipe(gulp.dest("public/fonts"));
 
   var buildJs = gulp
-    .src("app/js/**/*") // Переносим скрипты в продакшен
-    .pipe(gulp.dest("dist/js"));
+    .src("src/js/**/*") // Переносим скрипты в продакшен
+    .pipe(gulp.dest("public/js"));
 
   var buildHtml = gulp
-    .src("app/*.html") // Переносим HTML в продакшен
-    .pipe(gulp.dest("dist"));
+    .src("src/*.html") // Переносим HTML в продакшен
+    .pipe(gulp.dest("public"));
 });
 
 gulp.task("clear", (callback) =>{
@@ -113,5 +118,5 @@ gulp.task(
 );
 gulp.task(
   "build",
-  gulp.parallel("prebuild", "clear", "img", "sass", "scripts"),
+  gulp.parallel("clean", "prebuild", "img", "sass", "scripts"),
 );
